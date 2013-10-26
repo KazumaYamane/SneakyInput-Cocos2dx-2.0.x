@@ -12,7 +12,6 @@ protected:
 
 	CC_SYNTHESIZE_READONLY(cocos2d::CCPoint, stickPosition, StickPosition);
 	CC_SYNTHESIZE_READONLY(float, degrees, Degrees);
-	CC_SYNTHESIZE_READONLY(float, magnitude, Magnitude);
 	CC_SYNTHESIZE_READONLY(cocos2d::CCPoint, velocity, Velocity);
 	CC_SYNTHESIZE(bool, autoCenter, AutoCenter);
 	CC_SYNTHESIZE_READONLY(bool, isDPad, IsDPad);
