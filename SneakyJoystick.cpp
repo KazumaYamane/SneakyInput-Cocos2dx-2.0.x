@@ -17,6 +17,7 @@ bool SneakyJoystick::initWithRect(CCRect rect)
 	//if(CCSprite::init()){
 		stickPosition = CCPointZero;
 		degrees = 0.0f;
+		magnitude = 0.0f;
 		velocity = CCPointZero;
 		autoCenter = true;
 		isDPad = false;
@@ -58,6 +59,7 @@ void SneakyJoystick::updateVelocity(CCPoint point)
 	if(dSq <= deadRadiusSq){
 		velocity = CCPointZero;
 		degrees = 0.0f;
+		magnitude = 0.0f;
 		stickPosition = point;
 		return;
 	}
@@ -77,13 +79,25 @@ void SneakyJoystick::updateVelocity(CCPoint point)
 	cosAngle = cosf(angle);
 	sinAngle = sinf(angle);
 	
+	float adj_dx = dx - cosAngle * deadRadius;
+	float adj_dy = dy - sinAngle * deadRadius;
+	
+	float adj_Radius = joystickRadius - deadRadius;
+	
 	// NOTE: Velocity goes from -1.0 to 1.0.
 	if (dSq > joystickRadiusSq || isDPad) {
 		dx = cosAngle * joystickRadius;
 		dy = sinAngle * joystickRadius;
+		
+		adj_dx = cosAngle * adj_Radius;
+		adj_dy = sinAngle * adj_Radius;
 	}
 	
-	velocity = CCPointMake(dx/joystickRadius, dy/joystickRadius);
+	float adj_dSq = adj_dx * adj_dx + adj_dy * adj_dy;
+	float adj_RadiusSq = adj_Radius * adj_Radius;
+	
+	magnitude = adj_dSq / adj_RadiusSq;
+	velocity = CCPointMake(adj_dx/adj_Radius, adj_dy/adj_Radius);
 	degrees = angle * SJ_RAD2DEG;
 	
 	// Update the thumb's position
